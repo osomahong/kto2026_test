@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #3f78e0;
+  --color-primary-light: #e0ecff;
+  --color-primary-mid: #a5c4f7;
+  --color-accent-green: #45c4a0;
+  --color-accent-green-light: #e6f7f2;
+  --color-terminal-bg: #1a1a2e;
+  --color-terminal-green: #00ff88;
+  --color-terminal-dim: #4a5568;
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, "Apple SD Gothic Neo",
+    sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Slide animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes progressFill {
+  from {
+    width: 0%;
+  }
+}
+
+.animate-slide-in {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.animate-slide-out {
+  animation: slideOutLeft 0.25s ease-in forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Deadline glow pulse */
+@keyframes deadlineTextGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(79,142,247,0.4), 0 0 30px rgba(79,142,247,0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(79,142,247,0.8), 0 0 50px rgba(79,142,247,0.5), 0 0 80px rgba(79,142,247,0.3);
+  }
+}
+@keyframes deadlineBorderGlow {
+  0%, 100% { border-color: rgba(79,142,247,0.5); box-shadow: -2px 0 10px rgba(79,142,247,0.2); }
+  50% { border-color: rgba(79,142,247,1); box-shadow: -2px 0 20px rgba(79,142,247,0.5); }
+}
+.deadline-glow { animation: deadlineBorderGlow 3s ease-in-out infinite; }
+.deadline-glow-text { animation: deadlineTextGlow 3s ease-in-out infinite; }
+
+/* Marker glow pulse — slow, soft breathing */
+@keyframes markerGlow {
+  0%, 100% { opacity: 0.12; filter: brightness(1); }
+  50% { opacity: 0.42; filter: brightness(1.2) drop-shadow(0 0 3px rgba(255,255,255,0.15)); }
+}
+
+.marker-pulse-1 { animation: markerGlow 8s ease-in-out 2s both infinite; }
+.marker-pulse-2 { animation: markerGlow 10s ease-in-out 4s both infinite; }
+.marker-pulse-3 { animation: markerGlow 9s ease-in-out 6s both infinite; }
+.marker-pulse-4 { animation: markerGlow 11s ease-in-out 3s both infinite; }
+.marker-pulse-5 { animation: markerGlow 7.5s ease-in-out 5s both infinite; }
+.marker-pulse-6 { animation: markerGlow 12s ease-in-out 1s both infinite; }
+.marker-pulse-7 { animation: markerGlow 9.5s ease-in-out 7s both infinite; }
+.marker-pulse-8 { animation: markerGlow 8.5s ease-in-out 4.5s both infinite; }
+.marker-pulse-9 { animation: markerGlow 10.5s ease-in-out 6.5s both infinite; }
+.marker-pulse-10 { animation: markerGlow 13s ease-in-out 2.5s both infinite; }
+.marker-pulse-11 { animation: markerGlow 11.5s ease-in-out 8s both infinite; }
+.marker-pulse-12 { animation: markerGlow 9s ease-in-out 3.5s both infinite; }
