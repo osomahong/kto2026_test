@@ -127,7 +127,7 @@ export default function QuizPage() {
       )}
 
       {/* Main question layout */}
-      <main className="relative z-20 flex flex-col justify-start items-center h-full px-6 md:px-20 text-center pt-24 md:pt-32">
+      <main className="relative z-20 flex flex-col justify-start md:justify-center items-center h-full px-6 md:px-20 text-center pt-24 md:pt-0">
         {/* Step indicator */}
         <div className="font-mono text-[#4f8ef7] text-sm tracking-[4px] mb-5">
           QUESTION {String(questionNumber).padStart(2, "0")}

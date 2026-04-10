@@ -133,7 +133,7 @@ export default function ResultPage() {
         <section className="flex flex-col justify-center">
           {/* Type recommendation card */}
           <div
-            className="border border-[#4f8ef7] bg-[#4f8ef7]/10 px-6 py-4 md:px-12 md:py-6 mb-6 md:mb-8 backdrop-blur-sm"
+            className="border border-[#4f8ef7] bg-[#4f8ef7]/10 px-6 py-4 md:px-12 md:py-6 mb-6 md:mb-8 backdrop-blur-sm self-start"
             style={{ boxShadow: "0 0 30px rgba(79,142,247,0.15), inset 0 0 30px rgba(79,142,247,0.05)" }}
           >
             <div className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[3px] mb-2 md:mb-3">YOUR RECOMMENDED</div>
@@ -279,17 +279,6 @@ export default function ResultPage() {
         </section>
       </main>
 
-      {/* Data sidebar top-right (desktop) */}
-      <div className="fixed right-10 top-16 flex gap-8 z-[25] pointer-events-none hidden lg:flex">
-        <div className="border-l border-white/15 pl-4">
-          <div className="font-mono text-[9px] text-white/40 mb-1">FINAL_ENTROPY</div>
-          <div className="font-mono text-sm text-white">0.241</div>
-        </div>
-        <div className="border-l border-white/15 pl-4">
-          <div className="font-mono text-[9px] text-white/40 mb-1">POTENTIAL_CAP</div>
-          <div className="font-mono text-sm text-white">LVL. 09</div>
-        </div>
-      </div>
 
     </div>
   );
