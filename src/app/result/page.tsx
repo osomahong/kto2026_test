@@ -107,17 +107,11 @@ export default function ResultPage() {
       <div className="fixed top-0 left-0 right-0 h-[60px] z-[21] pointer-events-none" style={{ background: "linear-gradient(to bottom, black 40%, transparent)" }} />
       <div className="fixed bottom-0 left-0 right-0 h-[60px] z-[21] pointer-events-none" style={{ background: "linear-gradient(to top, black 40%, transparent)" }} />
 
-      {/* Logo — click to go home (fixed on desktop, absolute on mobile) */}
-      <button onClick={handleRestart} className="absolute top-7 left-7 md:fixed md:top-9 md:left-9 z-[30]" style={{ cursor: "pointer" }}>
-        <img src="/kto-logo.png" alt="한국관광공사" className="h-10 md:h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
-      </button>
-      <div className="fixed bottom-9 right-9 z-[11] hidden md:flex items-center gap-2">
-        <span className="font-mono text-[10px] uppercase tracking-[2px] text-white/30">POWERED BY</span>
-        <a href="https://osoma.kr/?utm_source=kto_test&utm_medium=typetest&utm_campaign=2026_data_ai&utm_content=powered_by&utm_term=logo" target="_blank" rel="noopener noreferrer" className="pointer-events-auto" style={{ cursor: "pointer" }}><img src="/osoma-logo.svg" alt="오픈소스마케팅" className="h-4 w-auto brightness-0 invert opacity-50 hover:opacity-80 transition-opacity" /></a>
-      </div>
-
-      {/* 다시 진단하기 — 모바일: 우측 상단 (스크롤과 함께 이동) */}
-      <div className="absolute top-7 right-7 z-[30] h-10 flex items-center lg:hidden">
+      {/* Header row — mobile only (flow-based, prevents overlap) */}
+      <div className="relative z-[30] flex justify-between items-center px-7 pt-7 pb-4 lg:hidden">
+        <button onClick={handleRestart} style={{ cursor: "pointer" }}>
+          <img src="/kto-logo.png" alt="한국관광공사" className="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+        </button>
         <button
           onClick={handleRestart}
           className="bg-white text-black font-mono text-[11px] uppercase tracking-[1.5px] px-4 py-2 hover:bg-white/85 transition-colors"
@@ -126,8 +120,16 @@ export default function ResultPage() {
           다시 진단하기
         </button>
       </div>
+      {/* Logo — desktop fixed */}
+      <button onClick={handleRestart} className="hidden lg:block fixed top-9 left-9 z-[30]" style={{ cursor: "pointer" }}>
+        <img src="/kto-logo.png" alt="한국관광공사" className="h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+      </button>
+      <div className="fixed bottom-9 right-9 z-[11] hidden md:flex items-center gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-[2px] text-white/30">POWERED BY</span>
+        <a href="https://osoma.kr/?utm_source=kto_test&utm_medium=typetest&utm_campaign=2026_data_ai&utm_content=powered_by&utm_term=logo" target="_blank" rel="noopener noreferrer" className="pointer-events-auto" style={{ cursor: "pointer" }}><img src="/osoma-logo.svg" alt="오픈소스마케팅" className="h-4 w-auto brightness-0 invert opacity-50 hover:opacity-80 transition-opacity" /></a>
+      </div>
       {/* Main content — 2 column on desktop, stacked on mobile */}
-      <main className="relative z-20 grid grid-cols-1 lg:grid-cols-2 lg:min-h-[100dvh] gap-8 lg:gap-[60px] px-6 py-20 shorth:py-12 md:px-16 lg:px-20 lg:items-center">
+      <main className="relative z-20 grid grid-cols-1 lg:grid-cols-2 lg:min-h-[100dvh] gap-8 lg:gap-[60px] px-6 pt-4 pb-20 shorth:pb-12 md:px-16 lg:px-20 lg:py-20 lg:items-center">
 
         {/* Left: result headline */}
         <section className="flex flex-col justify-center">

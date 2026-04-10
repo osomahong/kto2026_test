@@ -49,9 +49,13 @@ export default function IntroPage() {
         <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#4f8ef7]" />
       </div>
 
-      {/* Logo */}
-      <div className="fixed top-7 left-7 md:top-9 md:left-9 z-[11]">
-        <img src="/kto-logo.png" alt="한국관광공사" className="h-12 md:h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+      {/* Header row — mobile only */}
+      <div className="relative z-[30] px-7 pt-7 pb-2 md:hidden">
+        <img src="/kto-logo.png" alt="한국관광공사" className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+      </div>
+      {/* Logo — desktop fixed */}
+      <div className="hidden md:block fixed top-9 left-9 z-[11]">
+        <img src="/kto-logo.png" alt="한국관광공사" className="h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
       </div>
       <div className="fixed bottom-9 right-9 z-[11] hidden md:flex items-center gap-2">
         <span className="font-mono text-[10px] uppercase tracking-[2px] text-white/30">POWERED BY</span>
@@ -62,7 +66,7 @@ export default function IntroPage() {
 
       {/* Hero content */}
       <main
-        className="relative z-20 flex items-center h-screen px-8 md:px-[10%] transition-all duration-700"
+        className="relative z-20 flex items-start pt-16 md:items-center md:pt-0 h-screen px-8 md:px-[10%] transition-all duration-700"
         style={{
           opacity: transitioning ? 0 : 1,
           transform: transitioning ? "translateY(-30px)" : "translateY(0)",

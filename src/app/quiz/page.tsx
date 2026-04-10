@@ -104,18 +104,12 @@ export default function QuizPage() {
         <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#4f8ef7]" />
       </div>
 
-      {/* Logo — click to go home */}
-      <button onClick={handleRestart} className="fixed top-7 left-7 md:top-9 md:left-9 z-[30]" style={{ cursor: "pointer" }}>
-        <img src="/kto-logo.png" alt="한국관광공사" className="h-12 md:h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
-      </button>
-      <div className="fixed bottom-9 right-9 z-[11] hidden md:flex items-center gap-2">
-        <span className="font-mono text-[10px] uppercase tracking-[2px] text-white/30">POWERED BY</span>
-        <a href="https://osoma.kr/?utm_source=kto_test&utm_medium=typetest&utm_campaign=2026_data_ai&utm_content=powered_by&utm_term=logo" target="_blank" rel="noopener noreferrer" className="pointer-events-auto" style={{ cursor: "pointer" }}><img src="/osoma-logo.svg" alt="오픈소스마케팅" className="h-4 w-auto brightness-0 invert opacity-50 hover:opacity-80 transition-opacity" /></a>
-      </div>
-
-      {/* Navigation: mobile back only */}
-      {history.length > 1 && (
-        <div className="fixed top-7 right-7 z-30 md:hidden h-12 flex items-center">
+      {/* Header row — mobile only (flow-based, prevents overlap) */}
+      <div className="relative z-[30] flex justify-between items-center px-7 pt-7 pb-2 md:hidden">
+        <button onClick={handleRestart} style={{ cursor: "pointer" }}>
+          <img src="/kto-logo.png" alt="한국관광공사" className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+        </button>
+        {history.length > 1 && (
           <button
             onClick={handleBack}
             className="bg-white text-black font-mono text-[11px] uppercase tracking-[1.5px] px-4 py-2 active:bg-white/85 transition-colors"
@@ -123,11 +117,19 @@ export default function QuizPage() {
           >
             ← BACK
           </button>
-        </div>
-      )}
+        )}
+      </div>
+      {/* Logo — desktop fixed */}
+      <button onClick={handleRestart} className="hidden md:block fixed top-9 left-9 z-[30]" style={{ cursor: "pointer" }}>
+        <img src="/kto-logo.png" alt="한국관광공사" className="h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+      </button>
+      <div className="fixed bottom-9 right-9 z-[11] hidden md:flex items-center gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-[2px] text-white/30">POWERED BY</span>
+        <a href="https://osoma.kr/?utm_source=kto_test&utm_medium=typetest&utm_campaign=2026_data_ai&utm_content=powered_by&utm_term=logo" target="_blank" rel="noopener noreferrer" className="pointer-events-auto" style={{ cursor: "pointer" }}><img src="/osoma-logo.svg" alt="오픈소스마케팅" className="h-4 w-auto brightness-0 invert opacity-50 hover:opacity-80 transition-opacity" /></a>
+      </div>
 
       {/* Main question layout */}
-      <main className="relative z-20 flex flex-col justify-start md:justify-center items-center min-h-full px-6 md:px-20 text-center pt-24 shorth:pt-[72px] pb-20 md:pb-0 md:pt-0">
+      <main className="relative z-20 flex flex-col justify-start md:justify-center items-center min-h-full px-6 md:px-20 text-center pt-4 shorth:pt-2 pb-20 md:pb-0 md:pt-0">
         {/* Step indicator */}
         <div className="font-mono text-[#4f8ef7] text-sm tracking-[4px] mb-5 shorth:mb-3">
           QUESTION {String(questionNumber).padStart(2, "0")}
