@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { QuizResult } from "@/lib/types";
-import GizmoCursor from "@/components/GizmoCursor";
 import ScoreChart from "@/components/ScoreChart";
 
 const ParticleMesh = dynamic(() => import("@/components/ParticleMesh"), {
@@ -20,8 +19,6 @@ const type1 = {
     { tag: "02_SCHEMA", title: "데이터 수집 설계", desc: "비즈니스 목표에 기반하여 고객의 모든 터치포인트를 기록할 수 있는 데이터 스키마를 설계합니다." },
     { tag: "03_VIZ", title: "커스텀 대시보드", desc: "의사결정에 필요한 핵심 지표(KPI)를 실시간으로 확인할 수 있는 맞춤형 대시보드를 제공합니다." },
     { tag: "04_AGENT", title: "AI 인터페이스", desc: "SQL을 몰라도 자연어로 데이터를 조회하고 시각화할 수 있는 AI 에이전트 환경을 제공합니다." },
-    { tag: "05_SUBSIDY", title: "구독비 지원", desc: "최신 데이터 솔루션 및 AI 툴 도입을 위한 구독 비용 100만원을 전액 지원합니다." },
-    { tag: "06_CONSULT", title: "1:1 밀착 케어", desc: "5개월간 전문 컨설턴트가 배정되어 데이터 활용의 전 과정을 지속적으로 가이드합니다." },
   ],
   timeline: [
     { month: "1개월차", title: "현황 진단", desc: "기업 인터뷰, 데이터 수집 현황 검토, KPI 설정, AI 활용 수준 진단" },
@@ -44,11 +41,8 @@ const type2 = {
   desc: "축적된 데이터와 분석 역량을 바탕으로, AI 기반 그로스해킹을 통해 빠른 성장을 실현할 수 있는 단계입니다.",
   items: [
     { tag: "01_GROWTH", title: "그로스해킹 컨설팅", desc: "가설 수립부터 실험, 검증까지 3회 반복하는 데이터 기반 성장 전략을 함께 실행합니다." },
-    { tag: "02_BUDGET", title: "캠페인 실행 예산", desc: "데이터 마케팅에 바로 쓸 수 있는 실행 예산 1,000만원을 지원합니다." },
-    { tag: "03_ABTEST", title: "A/B 테스트 운영", desc: "3회의 캠페인을 A/B 테스트 기반으로 기획하고 운영하며, 성과를 체계적으로 분석합니다." },
-    { tag: "04_AI_OPT", title: "AI 크리에이티브 최적화", desc: "AI를 활용한 크리에이티브 생성과 캠페인 자동 최적화를 경험합니다." },
-    { tag: "05_SUBSIDY", title: "구독비 지원", desc: "최신 AI 솔루션 도입을 위한 구독 비용 100만원을 전액 지원합니다." },
-    { tag: "06_CONSULT", title: "1:1 밀착 케어", desc: "5개월간 전문 컨설턴트가 배정되어 성장 전략의 전 과정을 함께합니다." },
+    { tag: "02_ABTEST", title: "A/B 테스트 운영", desc: "3회의 캠페인을 A/B 테스트 기반으로 기획하고 운영하며, 성과를 체계적으로 분석합니다." },
+    { tag: "03_AX", title: "Agentic AI 기반 AX 지원", desc: "조직의 업무 프로세스를 확인하여 Agentic AI를 활용한 AX를 지원합니다." },
   ],
   timeline: [
     { month: "1개월차", title: "현황 파악 및 목표 설정", desc: "심층 인터뷰, 데이터 환경 진단, 핵심 KPI 설정, 성장 가설 수립" },
@@ -102,21 +96,20 @@ export default function ResultPage() {
       className="relative w-full min-h-[100dvh] bg-black text-white font-[Pretendard,sans-serif] overflow-x-hidden"
       style={{ cursor: "crosshair" }}
     >
-      <GizmoCursor />
       <ParticleMesh />
 
       {/* Viewport frame */}
-      <div className="fixed inset-5 border border-white/15 z-10 pointer-events-none">
+      <div className="fixed inset-5 border border-white/15 z-[22] pointer-events-none">
         <div className="absolute -top-px -left-px w-5 h-5 border-l border-t border-[#4f8ef7]" />
         <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#4f8ef7]" />
       </div>
-      {/* Top/bottom fade masks — content fades at viewport frame edges */}
-      <div className="fixed top-0 left-0 right-0 h-[60px] z-[9] pointer-events-none" style={{ background: "linear-gradient(to bottom, black 40%, transparent)" }} />
-      <div className="fixed bottom-0 left-0 right-0 h-[60px] z-[9] pointer-events-none" style={{ background: "linear-gradient(to top, black 40%, transparent)" }} />
+      {/* Top/bottom fade masks */}
+      <div className="fixed top-0 left-0 right-0 h-[60px] z-[21] pointer-events-none" style={{ background: "linear-gradient(to bottom, black 40%, transparent)" }} />
+      <div className="fixed bottom-0 left-0 right-0 h-[60px] z-[21] pointer-events-none" style={{ background: "linear-gradient(to top, black 40%, transparent)" }} />
 
       {/* Logo — click to go home (fixed on desktop, absolute on mobile) */}
       <button onClick={handleRestart} className="absolute top-7 left-7 md:fixed md:top-9 md:left-9 z-[30]" style={{ cursor: "pointer" }}>
-        <img src="/kto-logo.png" alt="한국관광공사" className="h-12 md:h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+        <img src="/kto-logo.png" alt="한국관광공사" className="h-10 md:h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
       </button>
       <div className="fixed bottom-9 right-9 z-[11] hidden md:flex items-center gap-2">
         <span className="font-mono text-[10px] uppercase tracking-[2px] text-white/30">POWERED BY</span>
@@ -124,13 +117,15 @@ export default function ResultPage() {
       </div>
 
       {/* 다시 진단하기 — 모바일: 우측 상단 (스크롤과 함께 이동) */}
-      <button
-        onClick={handleRestart}
-        className="absolute top-7 right-7 z-[30] bg-white text-black font-mono text-[11px] uppercase tracking-[1.5px] px-4 py-2 hover:bg-white/85 transition-colors lg:hidden"
-        style={{ cursor: "pointer" }}
-      >
-        다시 진단하기
-      </button>
+      <div className="absolute top-7 right-7 z-[30] h-10 flex items-center lg:hidden">
+        <button
+          onClick={handleRestart}
+          className="bg-white text-black font-mono text-[11px] uppercase tracking-[1.5px] px-4 py-2 hover:bg-white/85 transition-colors"
+          style={{ cursor: "pointer" }}
+        >
+          다시 진단하기
+        </button>
+      </div>
       {/* Main content — 2 column on desktop, stacked on mobile */}
       <main className="relative z-20 grid grid-cols-1 lg:grid-cols-2 lg:min-h-[100dvh] gap-8 lg:gap-[60px] px-6 py-20 md:px-16 lg:px-20 lg:items-center">
 
@@ -138,30 +133,30 @@ export default function ResultPage() {
         <section className="flex flex-col justify-center">
           {/* Type recommendation card */}
           <div
-            className="border border-[#4f8ef7] bg-[#4f8ef7]/10 px-8 py-5 md:px-12 md:py-6 mb-8 backdrop-blur-sm"
+            className="border border-[#4f8ef7] bg-[#4f8ef7]/10 px-6 py-4 md:px-12 md:py-6 mb-6 md:mb-8 backdrop-blur-sm"
             style={{ boxShadow: "0 0 30px rgba(79,142,247,0.15), inset 0 0 30px rgba(79,142,247,0.05)" }}
           >
-            <div className="font-mono text-[10px] text-white/40 tracking-[3px] mb-3">YOUR RECOMMENDED</div>
-            <div className="flex items-baseline gap-2 whitespace-nowrap">
+            <div className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[3px] mb-2 md:mb-3">YOUR RECOMMENDED</div>
+            <div className="flex items-baseline gap-1.5 md:gap-2 whitespace-nowrap">
               <span
-                className="text-4xl md:text-6xl font-black text-[#4f8ef7]"
+                className="text-3xl md:text-6xl font-black text-[#4f8ef7]"
                 style={{ textShadow: "0 0 30px rgba(79,142,247,0.5), 0 0 60px rgba(79,142,247,0.2)" }}
               >
                 유형{result.recommendedType}
               </span>
-              <span className="text-4xl md:text-6xl font-black text-white">
+              <span className="text-3xl md:text-6xl font-black text-white">
                 에 지원하세요
               </span>
             </div>
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl md:text-[3.2rem] font-extrabold leading-[1.15] tracking-[-0.02em] mb-8 whitespace-pre-line break-keep">
+          <h1 className="text-xl md:text-[3.2rem] font-extrabold leading-[1.2] tracking-[-0.02em] mb-6 md:mb-8 whitespace-pre-line break-keep">
             {content.title}
           </h1>
 
           {/* Description */}
-          <p className="text-base md:text-lg text-white/80 leading-[1.7] mb-10 max-w-[500px] break-keep">
+          <p className="text-sm md:text-lg text-white/80 leading-[1.7] mb-8 md:mb-10 max-w-[500px] break-keep">
             {content.desc}
           </p>
 

@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import GizmoCursor from "@/components/GizmoCursor";
-import ScrollLogs from "@/components/ScrollLogs";
 
 const ParticleMesh = dynamic(() => import("@/components/ParticleMesh"), {
   ssr: false,
@@ -232,7 +231,6 @@ export default function IntroPage() {
         </svg>
       </div>
 
-      <ScrollLogs />
 
 
       <style jsx>{`

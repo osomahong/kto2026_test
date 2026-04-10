@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import ScrollLogs from "@/components/ScrollLogs";
 
 const ParticleMesh = dynamic(() => import("@/components/ParticleMesh"), {
   ssr: false,
@@ -141,8 +140,6 @@ export default function AgentTerminal({
           )}
         </div>
       </div>
-
-      <ScrollLogs />
     </div>
   );
 }

@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { allNodes, startNodeId, getNextNodeId, dimensionLabels } from "@/data/questions";
 import { calculateResult } from "@/lib/scoring";
-import GizmoCursor from "@/components/GizmoCursor";
-import ScrollLogs from "@/components/ScrollLogs";
 import AgentTerminal from "@/components/AgentTerminal";
 
 const ParticleMesh = dynamic(() => import("@/components/ParticleMesh"), {
@@ -98,7 +96,6 @@ export default function QuizPage() {
       className="relative w-full h-[100dvh] overflow-hidden bg-black text-white font-[Pretendard,sans-serif]"
       style={{ cursor: "crosshair", position: "fixed", inset: 0 }}
     >
-      <GizmoCursor />
       <ParticleMesh />
 
       {/* Viewport frame */}
@@ -118,7 +115,7 @@ export default function QuizPage() {
 
       {/* Navigation: mobile back only */}
       {history.length > 1 && (
-        <div className="fixed top-7 right-7 z-30 md:hidden">
+        <div className="fixed top-7 right-7 z-30 md:hidden h-12 flex items-center">
           <button
             onClick={handleBack}
             className="bg-white text-black font-mono text-[11px] uppercase tracking-[1.5px] px-4 py-2 active:bg-white/85 transition-colors"
@@ -130,7 +127,7 @@ export default function QuizPage() {
       )}
 
       {/* Main question layout */}
-      <main className="relative z-20 flex flex-col justify-center items-center h-full px-6 md:px-20 text-center">
+      <main className="relative z-20 flex flex-col justify-start items-center h-full px-6 md:px-20 text-center pt-24 md:pt-32">
         {/* Step indicator */}
         <div className="font-mono text-[#4f8ef7] text-sm tracking-[4px] mb-5">
           QUESTION {String(questionNumber).padStart(2, "0")}
@@ -243,7 +240,6 @@ export default function QuizPage() {
         </div>
       </div>
 
-      <ScrollLogs />
     </div>
   );
 }
