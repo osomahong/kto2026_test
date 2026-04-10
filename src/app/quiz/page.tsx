@@ -93,7 +93,7 @@ export default function QuizPage() {
 
   return (
     <div
-      className="relative w-full h-[100dvh] overflow-hidden bg-black text-white font-[Pretendard,sans-serif]"
+      className="relative w-full h-[100dvh] overflow-y-auto md:overflow-hidden bg-black text-white font-[Pretendard,sans-serif]"
       style={{ cursor: "crosshair", position: "fixed", inset: 0 }}
     >
       <ParticleMesh />
@@ -127,14 +127,14 @@ export default function QuizPage() {
       )}
 
       {/* Main question layout */}
-      <main className="relative z-20 flex flex-col justify-start md:justify-center items-center h-full px-6 md:px-20 text-center pt-24 md:pt-0">
+      <main className="relative z-20 flex flex-col justify-start md:justify-center items-center min-h-full px-6 md:px-20 text-center pt-24 shorth:pt-[72px] pb-20 md:pb-0 md:pt-0">
         {/* Step indicator */}
-        <div className="font-mono text-[#4f8ef7] text-sm tracking-[4px] mb-5">
+        <div className="font-mono text-[#4f8ef7] text-sm tracking-[4px] mb-5 shorth:mb-3">
           QUESTION {String(questionNumber).padStart(2, "0")}
         </div>
 
         {/* Progress bar */}
-        <div className="w-[240px] h-[2px] bg-white/15 mb-5 relative">
+        <div className="w-[240px] h-[2px] bg-white/15 mb-5 shorth:mb-2 relative">
           <div
             className="absolute top-0 left-0 h-full bg-[#4f8ef7] transition-all duration-500 ease-out"
             style={{ width: `${progressPct}%`, boxShadow: "0 0 10px #4f8ef7" }}
@@ -142,14 +142,14 @@ export default function QuizPage() {
         </div>
 
         {/* Section label */}
-        <div className="font-mono text-[10px] text-white/30 uppercase tracking-[2px] mb-8">
+        <div className="font-mono text-[10px] text-white/30 uppercase tracking-[2px] mb-8 shorth:mb-4">
           {dimensionLabels[currentNode.dimension]}
         </div>
 
         {/* Question text */}
         <h1
           key={`text-${slideKey}`}
-          className="text-xl md:text-[2.5rem] font-bold leading-[1.3] mb-10 md:mb-14 max-w-[800px] break-keep animate-fade-in"
+          className="text-xl shorth:text-lg md:text-[2.5rem] font-bold leading-[1.3] mb-10 shorth:mb-6 md:mb-14 max-w-[800px] break-keep animate-fade-in"
         >
           {currentNode.text}
         </h1>
@@ -159,8 +159,8 @@ export default function QuizPage() {
           key={`opts-${slideKey}`}
           className={`w-full max-w-[900px] animate-fade-in ${
             isOX
-              ? "grid grid-cols-2 gap-4 md:gap-5"
-              : "grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5"
+              ? "grid grid-cols-2 gap-4 shorth:gap-2.5 md:gap-5"
+              : "grid grid-cols-1 md:grid-cols-2 gap-3 shorth:gap-2.5 md:gap-5"
           }`}
           style={{ animationDelay: "0.1s", animationFillMode: "backwards" }}
         >
@@ -172,7 +172,7 @@ export default function QuizPage() {
                 onClick={() => handleSelect(opt.value)}
                 disabled={selecting !== null}
                 className={`
-                  text-left p-5 md:p-[30px] border transition-all duration-300 relative group backdrop-blur-md
+                  text-left p-5 shorth:p-3.5 md:p-[30px] border transition-all duration-300 relative group backdrop-blur-md
                   ${
                     isSelected
                       ? "border-[#4f8ef7] bg-[rgba(79,142,247,0.15)] -translate-y-1"

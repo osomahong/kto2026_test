@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant shorth (@media (max-height: 700px));
+
 @theme {
   --color-primary: #3f78e0;
   --color-primary-light: #e0ecff;

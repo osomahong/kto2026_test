@@ -127,7 +127,7 @@ export default function ResultPage() {
         </button>
       </div>
       {/* Main content — 2 column on desktop, stacked on mobile */}
-      <main className="relative z-20 grid grid-cols-1 lg:grid-cols-2 lg:min-h-[100dvh] gap-8 lg:gap-[60px] px-6 py-20 md:px-16 lg:px-20 lg:items-center">
+      <main className="relative z-20 grid grid-cols-1 lg:grid-cols-2 lg:min-h-[100dvh] gap-8 lg:gap-[60px] px-6 py-20 shorth:py-12 md:px-16 lg:px-20 lg:items-center">
 
         {/* Left: result headline */}
         <section className="flex flex-col justify-center">
