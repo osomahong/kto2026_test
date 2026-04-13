@@ -89,16 +89,16 @@ export default function IntroPage() {
           </div>
 
           {/* Title */}
-          <h1 className="text-[1.5rem] shorth:text-xl md:text-[4.5rem] font-extrabold leading-[1.1] tracking-[-0.04em] mb-6 shorth:mb-4">
+          <h1 className="text-2xl shorth:text-xl md:text-[4.5rem] font-extrabold leading-[1.1] tracking-[-0.04em] mb-6 shorth:mb-4">
             <span className="text-glow">우리 기업에 맞는</span>
             <br />
-            <span className="inline-block bg-[rgba(0,255,65,0.45)] px-3 py-1 -mx-3 whitespace-nowrap">DATA·AI 지원사업</span>
+            <span className="inline-block bg-[rgba(0,255,65,0.45)] px-1.5 py-0.5 -mx-1.5 whitespace-nowrap">DATA·AI 지원사업</span>
             <br />
             <span className="text-glow">유형 확인하기</span>
           </h1>
 
           {/* Description */}
-          <p className="text-lg md:text-xl text-white/70 leading-relaxed mb-10 shorth:mb-6 max-w-[460px] break-keep text-glow">
+          <p className="text-sm md:text-xl text-white/70 leading-relaxed mb-10 shorth:mb-6 max-w-[460px] break-keep text-glow">
             우리 회사의 데이터·AI 역량을 진단하고
             <br />
             필요한 지원 유형을 확인합니다.
@@ -109,7 +109,7 @@ export default function IntroPage() {
             <button
               onClick={handleStart}
               disabled={transitioning}
-              className="group bg-[#00ff41] text-black px-10 md:px-12 py-5 shorth:py-4 md:py-[22px] font-mono uppercase text-base font-bold tracking-[1px] relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,65,0.5)] hover:-translate-y-0.5 disabled:opacity-30 disabled:hover:shadow-none disabled:hover:translate-y-0 pointer-events-auto"
+              className="group bg-[#00ff41] text-black px-8 md:px-10 py-4 shorth:py-3 md:py-[18px] font-mono uppercase text-sm font-bold tracking-[1px] relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,65,0.5)] hover:-translate-y-0.5 disabled:opacity-30 disabled:hover:shadow-none disabled:hover:translate-y-0 pointer-events-auto"
               style={{ cursor: "pointer" }}
             >
               <span className="relative">진단 프로세스 시작하기</span>

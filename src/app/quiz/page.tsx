@@ -50,6 +50,7 @@ export default function QuizPage() {
   const handleMeshAnimDone = useCallback((completedPhase: "suck-in" | "expand-out") => {
     if (completedPhase === "suck-in") {
       const pending = pendingNextRef.current;
+      setSelecting(null);
       if (pending) {
         if (pending.nextId) {
           setSlideKey((k) => k + 1);
@@ -62,7 +63,6 @@ export default function QuizPage() {
       }
     } else if (completedPhase === "expand-out") {
       setMeshAnim("idle");
-      setSelecting(null);
     }
   }, []);
 
