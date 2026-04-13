@@ -26,7 +26,7 @@ export default function MultipleChoice({
               transition-all duration-200 flex items-center gap-3
               ${
                 isSelected
-                  ? "bg-[#3f78e0] text-white shadow-lg shadow-blue-200"
+                  ? "bg-[#00cc33] text-white shadow-lg shadow-green-400/30"
                   : "bg-white text-gray-700 border border-gray-200 active:scale-[0.98]"
               }
             `}

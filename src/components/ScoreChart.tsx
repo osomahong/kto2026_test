@@ -22,7 +22,7 @@ export default function ScoreChart({
       {scores.map((score, i) => {
         const pct = Math.round(score.raw * 100);
         const barColor =
-          pct >= 60 ? "#4f8ef7" : pct >= 30 ? "#4f8ef7" : dark ? "#4f8ef7" : "#dde7f7";
+          pct >= 60 ? "#00ff41" : pct >= 30 ? "#00ff41" : dark ? "#00ff41" : "#dde7f7";
         const barOpacity = pct >= 60 ? 1 : pct >= 30 ? 0.6 : 0.3;
 
         return (
@@ -42,7 +42,7 @@ export default function ScoreChart({
               </span>
               <span
                 className="text-sm font-bold font-mono"
-                style={{ color: "#4f8ef7", opacity: barOpacity }}
+                style={{ color: "#00ff41", opacity: barOpacity }}
               >
                 {pct}%
               </span>

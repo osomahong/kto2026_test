@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 
 const ParticleMesh = dynamic(() => import("@/components/ParticleMesh"), {
@@ -22,13 +22,23 @@ export default function AgentTerminal({
 }) {
   const [visibleLines, setVisibleLines] = useState(0);
   const [typingIndex, setTypingIndex] = useState(0);
+  const [meshAnim, setMeshAnim] = useState<"idle" | "suck-in" | "expand-out">("expand-out");
+  const [typingDone, setTypingDone] = useState(false);
+
+  const handleMeshAnimDone = useCallback((phase: "suck-in" | "expand-out") => {
+    if (phase === "suck-in") {
+      onComplete();
+    } else if (phase === "expand-out") {
+      setMeshAnim("idle");
+    }
+  }, [onComplete]);
 
   const lines: TerminalLine[] = [
     { text: "> 응답 데이터 수집 완료 (10/10)", type: "command" },
-    { text: "> 데이터 수집 환경 분석 중... ████████░░ 완료", type: "progress" },
-    { text: "> 분석 도구 활용도 평가 중... ████████░░ 완료", type: "progress" },
-    { text: "> 마케팅 캠페인 역량 분석 중... ████████░░ 완료", type: "progress" },
-    { text: "> AI 활용 준비도 진단 중... ████████░░ 완료", type: "progress" },
+    { text: "> 데이터 수집 환경 분석 중... ████████░░", type: "progress" },
+    { text: "> 분석 도구 활용도 평가 중... ████████░░", type: "progress" },
+    { text: "> 마케팅 캠페인 역량 분석 중... ████████░░", type: "progress" },
+    { text: "> AI 활용 준비도 진단 중... ████████░░", type: "progress" },
     { text: "> ", type: "command" },
     { text: "> 종합 점수 산출 중...", type: "command" },
     {
@@ -39,8 +49,9 @@ export default function AgentTerminal({
   ];
 
   useEffect(() => {
-    if (visibleLines >= lines.length) {
-      const timer = setTimeout(onComplete, 1200);
+    if (visibleLines >= lines.length && !typingDone) {
+      setTypingDone(true);
+      const timer = setTimeout(() => setMeshAnim("suck-in"), 1200);
       return () => clearTimeout(timer);
     }
 
@@ -68,12 +79,12 @@ export default function AgentTerminal({
       className="fixed inset-0 z-50 bg-black text-white font-[Pretendard,sans-serif] overflow-hidden"
       style={{ cursor: "crosshair" }}
     >
-      <ParticleMesh />
+      <ParticleMesh animationState={meshAnim} onAnimationComplete={handleMeshAnimDone} />
 
       {/* Viewport frame */}
       <div className="fixed inset-5 border border-white/15 z-10 pointer-events-none">
-        <div className="absolute -top-px -left-px w-5 h-5 border-l border-t border-[#4f8ef7]" />
-        <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#4f8ef7]" />
+        <div className="absolute -top-px -left-px w-5 h-5 border-l border-t border-[#00ff41]" />
+        <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#00ff41]" />
       </div>
 
       {/* Logo */}
@@ -90,35 +101,37 @@ export default function AgentTerminal({
       {/* Centered content — no window chrome */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full px-6 md:px-20">
         {/* Step label */}
-        <div className="font-mono text-[#4f8ef7] text-sm tracking-[4px] mb-5">
+        <div className="font-mono text-[#00ff41] text-sm tracking-[4px] mb-5 text-glow">
           ANALYZING
         </div>
 
         {/* Progress bar */}
         <div className="w-[200px] h-[2px] bg-white/15 mb-10 relative overflow-hidden">
           <div
-            className="absolute top-0 left-0 h-full bg-[#4f8ef7]"
+            className="absolute top-0 left-0 h-full bg-[#00ff41]"
             style={{
               width: `${progressPct}%`,
-              boxShadow: "0 0 10px #4f8ef7",
+              boxShadow: "0 0 10px #00ff41",
               transition: "width 0.4s ease-out",
             }}
           />
         </div>
 
-        {/* Terminal lines — raw, no window frame */}
-        <div className="w-full max-w-[700px] font-mono text-sm md:text-base leading-loose">
+        {/* Terminal lines — centered */}
+        <div className="w-full max-w-[700px] font-mono text-sm md:text-base leading-loose text-center text-glow">
           {lines.slice(0, visibleLines + 1).map((line, i) => {
             const isCurrentLine = i === visibleLines;
             const displayText = isCurrentLine
               ? line.text.slice(0, typingIndex)
               : line.text;
+            const isFinishedTyping = !isCurrentLine || typingIndex >= line.text.length;
+            const showComplete = line.type === "progress" && isFinishedTyping;
 
             return (
               <div
                 key={i}
                 className={`
-                  ${line.highlight ? "text-[#4f8ef7] font-bold text-lg md:text-xl" : ""}
+                  ${line.highlight ? "text-[#00ff41] font-bold text-lg md:text-xl" : ""}
                   ${!line.highlight && !isCurrentLine ? "text-white font-semibold" : ""}
                   ${!line.highlight && isCurrentLine && line.type === "command" ? "text-white/80" : ""}
                   ${!line.highlight && isCurrentLine && line.type === "progress" ? "text-white/45" : ""}
@@ -126,8 +139,9 @@ export default function AgentTerminal({
                 `}
               >
                 {displayText}
+                {showComplete && <span className="text-[#00ff41]"> 완료</span>}
                 {isCurrentLine && typingIndex < line.text.length && (
-                  <span className="animate-blink text-[#4f8ef7]">▌</span>
+                  <span className="animate-blink text-[#00ff41]">▌</span>
                 )}
               </div>
             );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { allNodes, startNodeId, getNextNodeId, dimensionLabels } from "@/data/questions";
@@ -20,6 +20,10 @@ export default function QuizPage() {
   const [phase, setPhase] = useState<"quiz" | "analyzing">("quiz");
   const [slideKey, setSlideKey] = useState(0);
   const [selecting, setSelecting] = useState<number | null>(null);
+  const [meshAnim, setMeshAnim] = useState<"idle" | "suck-in" | "expand-out">("expand-out");
+
+  // Store pending next state for after suck-in completes
+  const pendingNextRef = useRef<{ nextId: string | null; newAnswers: Record<string, number> } | null>(null);
 
   const currentNodeId = history[history.length - 1];
   const currentNode = allNodes[currentNodeId];
@@ -37,19 +41,30 @@ export default function QuizPage() {
       setAnswers(newAnswers);
 
       const nextId = getNextNodeId(currentNode, value);
-
-      setTimeout(() => {
-        setSelecting(null);
-        if (nextId && allNodes[nextId]) {
-          setSlideKey((k) => k + 1);
-          setHistory((h) => [...h, nextId]);
-        } else {
-          setPhase("analyzing");
-        }
-      }, 500);
+      pendingNextRef.current = { nextId: nextId && allNodes[nextId] ? nextId : null, newAnswers };
+      setMeshAnim("suck-in");
     },
     [currentNode, answers, selecting]
   );
+
+  const handleMeshAnimDone = useCallback((completedPhase: "suck-in" | "expand-out") => {
+    if (completedPhase === "suck-in") {
+      const pending = pendingNextRef.current;
+      if (pending) {
+        if (pending.nextId) {
+          setSlideKey((k) => k + 1);
+          setHistory((h) => [...h, pending.nextId!]);
+          setMeshAnim("expand-out");
+        } else {
+          setPhase("analyzing");
+        }
+        pendingNextRef.current = null;
+      }
+    } else if (completedPhase === "expand-out") {
+      setMeshAnim("idle");
+      setSelecting(null);
+    }
+  }, []);
 
   const handleBack = () => {
     if (history.length <= 1) return;
@@ -96,12 +111,12 @@ export default function QuizPage() {
       className="relative w-full h-[100dvh] overflow-y-auto md:overflow-hidden bg-black text-white font-[Pretendard,sans-serif]"
       style={{ cursor: "crosshair", position: "fixed", inset: 0 }}
     >
-      <ParticleMesh />
+      <ParticleMesh animationState={meshAnim} onAnimationComplete={handleMeshAnimDone} />
 
       {/* Viewport frame */}
       <div className="fixed inset-5 border border-white/15 z-10 pointer-events-none">
-        <div className="absolute -top-px -left-px w-5 h-5 border-l border-t border-[#4f8ef7]" />
-        <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#4f8ef7]" />
+        <div className="absolute -top-px -left-px w-5 h-5 border-l border-t border-[#00ff41]" />
+        <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#00ff41]" />
       </div>
 
       {/* Header row — mobile only (flow-based, prevents overlap) */}
@@ -131,27 +146,22 @@ export default function QuizPage() {
       {/* Main question layout */}
       <main className="relative z-20 flex flex-col justify-start md:justify-center items-center min-h-full px-6 md:px-20 text-center pt-4 shorth:pt-2 pb-20 md:pb-0 md:pt-0">
         {/* Step indicator */}
-        <div className="font-mono text-[#4f8ef7] text-sm tracking-[4px] mb-5 shorth:mb-3">
+        <div className="font-mono text-[#00ff41] text-sm tracking-[4px] mb-5 shorth:mb-3 text-glow">
           QUESTION {String(questionNumber).padStart(2, "0")}
         </div>
 
         {/* Progress bar */}
         <div className="w-[240px] h-[2px] bg-white/15 mb-5 shorth:mb-2 relative">
           <div
-            className="absolute top-0 left-0 h-full bg-[#4f8ef7] transition-all duration-500 ease-out"
-            style={{ width: `${progressPct}%`, boxShadow: "0 0 10px #4f8ef7" }}
+            className="absolute top-0 left-0 h-full bg-[#00ff41] transition-all duration-500 ease-out"
+            style={{ width: `${progressPct}%`, boxShadow: "0 0 8px #00ff41, 0 0 20px #00ff41, 0 0 40px rgba(0,255,65,0.3)" }}
           />
-        </div>
-
-        {/* Section label */}
-        <div className="font-mono text-[10px] text-white/30 uppercase tracking-[2px] mb-8 shorth:mb-4">
-          {dimensionLabels[currentNode.dimension]}
         </div>
 
         {/* Question text */}
         <h1
           key={`text-${slideKey}`}
-          className="text-xl shorth:text-lg md:text-[2.5rem] font-bold leading-[1.3] mb-10 shorth:mb-6 md:mb-14 max-w-[800px] break-keep animate-fade-in"
+          className="text-xl shorth:text-lg md:text-[2.5rem] font-bold leading-[1.3] mb-10 shorth:mb-6 md:mb-14 max-w-[800px] break-keep animate-fade-in text-glow"
         >
           {currentNode.text}
         </h1>
@@ -174,26 +184,28 @@ export default function QuizPage() {
                 onClick={() => handleSelect(opt.value)}
                 disabled={selecting !== null}
                 className={`
-                  text-left p-5 shorth:p-3.5 md:p-[30px] border transition-all duration-300 relative group backdrop-blur-md
+                  text-left p-3.5 shorth:p-3 md:p-[30px] border transition-all duration-300 relative group backdrop-blur-md
                   ${
                     isSelected
-                      ? "border-[#4f8ef7] bg-[rgba(79,142,247,0.15)] -translate-y-1"
-                      : "border-white/20 bg-white/[0.08] hover:border-[#4f8ef7] hover:bg-[rgba(79,142,247,0.12)] hover:-translate-y-1"
+                      ? "border-[#00ff41] bg-[rgba(0,255,65,0.15)] -translate-y-1"
+                      : "border-white/20 bg-white/[0.08] hover:border-[#00ff41] hover:bg-[rgba(0,255,65,0.12)] hover:-translate-y-1"
                   }
                 `}
                 style={{ cursor: "pointer" }}
               >
-                <span className="font-mono text-[#4f8ef7] text-base font-bold block mb-2 tracking-[1px]">
-                  {isOX
-                    ? idx === 0 ? "YES" : "NO"
-                    : `${String.fromCharCode(65 + idx)}.`}
-                </span>
-                <div className="text-sm md:text-[1.1rem] leading-relaxed text-white/90">
-                  {opt.label}
+                <div className={isOX ? "" : "flex items-start gap-2 md:block"}>
+                  <span className={`font-mono text-[#00ff41] text-base font-bold tracking-[1px] ${isOX ? "block mb-2" : "shrink-0 md:block md:mb-2"}`}>
+                    {isOX
+                      ? idx === 0 ? "YES" : "NO"
+                      : `${String.fromCharCode(65 + idx)}.`}
+                  </span>
+                  <div className="text-sm md:text-[1.1rem] leading-relaxed text-white/90">
+                    {opt.label}
+                  </div>
                 </div>
                 {/* Selection flash */}
                 {isSelected && (
-                  <div className="absolute inset-0 border-2 border-[#4f8ef7] animate-fade-in" style={{ boxShadow: "0 0 20px rgba(79,142,247,0.2)" }} />
+                  <div className="absolute inset-0 border-2 border-[#00ff41] animate-fade-in" style={{ boxShadow: "0 0 20px rgba(0,255,65,0.2)" }} />
                 )}
               </button>
             );
@@ -229,15 +241,15 @@ export default function QuizPage() {
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={i}
-                className={`w-1.5 h-1.5 ${i < questionNumber ? "bg-[#4f8ef7]" : "bg-white/10"}`}
+                className={`w-1.5 h-1.5 ${i < questionNumber ? "bg-[#00ff41]" : "bg-white/10"}`}
               />
             ))}
           </div>
         </div>
         <div className="border-l border-white/15 pl-4">
-          <div className="font-mono text-[10px] text-white/40 mb-2">TYPE</div>
-          <div className="font-mono text-lg text-white">
-            {currentNode.type === "ox" ? "BINARY" : "SELECT"}
+          <div className="font-mono text-[10px] text-white/40 mb-2">TOPIC</div>
+          <div className="font-mono text-sm text-white">
+            {dimensionLabels[currentNode.dimension]}
           </div>
         </div>
       </div>

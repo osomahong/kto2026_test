@@ -3,9 +3,9 @@
 @custom-variant shorth (@media (max-height: 700px));
 
 @theme {
-  --color-primary: #3f78e0;
-  --color-primary-light: #e0ecff;
-  --color-primary-mid: #a5c4f7;
+  --color-primary: #00cc33;
+  --color-primary-light: #d0ffd6;
+  --color-primary-mid: #66ff88;
   --color-accent-green: #45c4a0;
   --color-accent-green-light: #e6f7f2;
   --color-terminal-bg: #1a1a2e;
@@ -17,6 +17,9 @@
 }
 
 @layer base {
+  html {
+    font-size: 120%;
+  }
   body {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -103,18 +106,26 @@
   animation: blink 1s step-end infinite;
 }
 
+/* Black glow behind text for readability over particles */
+.text-glow {
+  text-shadow:
+    0 0 8px rgba(0,0,0,0.9),
+    0 0 20px rgba(0,0,0,0.8),
+    0 0 40px rgba(0,0,0,0.6);
+}
+
 /* Deadline glow pulse */
 @keyframes deadlineTextGlow {
   0%, 100% {
-    text-shadow: 0 0 10px rgba(79,142,247,0.4), 0 0 30px rgba(79,142,247,0.2);
+    text-shadow: 0 0 10px rgba(0,255,65,0.4), 0 0 30px rgba(0,255,65,0.2);
   }
   50% {
-    text-shadow: 0 0 20px rgba(79,142,247,0.8), 0 0 50px rgba(79,142,247,0.5), 0 0 80px rgba(79,142,247,0.3);
+    text-shadow: 0 0 20px rgba(0,255,65,0.8), 0 0 50px rgba(0,255,65,0.5), 0 0 80px rgba(0,255,65,0.3);
   }
 }
 @keyframes deadlineBorderGlow {
-  0%, 100% { border-color: rgba(79,142,247,0.5); box-shadow: -2px 0 10px rgba(79,142,247,0.2); }
-  50% { border-color: rgba(79,142,247,1); box-shadow: -2px 0 20px rgba(79,142,247,0.5); }
+  0%, 100% { border-color: rgba(0,255,65,0.5); box-shadow: -2px 0 10px rgba(0,255,65,0.2); }
+  50% { border-color: rgba(0,255,65,1); box-shadow: -2px 0 20px rgba(0,255,65,0.5); }
 }
 .deadline-glow { animation: deadlineBorderGlow 3s ease-in-out infinite; }
 .deadline-glow-text { animation: deadlineTextGlow 3s ease-in-out infinite; }

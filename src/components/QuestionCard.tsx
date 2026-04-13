@@ -21,7 +21,7 @@ export default function QuestionCard({
       {/* Area icon + label */}
       <div className="flex items-center gap-2 mb-4">
         <AreaIcon dimension={node.dimension} />
-        <span className="text-sm font-medium text-[#3f78e0]">
+        <span className="text-sm font-medium text-[#00cc33]">
           {dimensionLabels[node.dimension]}
         </span>
       </div>

@@ -48,7 +48,7 @@ export default function ScrollLogs() {
               isLatest
                 ? "text-white/80"
                 : isSys
-                  ? "text-[#4f8ef7]/70"
+                  ? "text-[#00ff41]/70"
                   : isGoal
                     ? "text-white/60"
                     : "text-white/55"

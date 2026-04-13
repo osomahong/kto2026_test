@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { QuizResult } from "@/lib/types";
@@ -64,6 +64,10 @@ export default function ResultPage() {
   const router = useRouter();
   const [result, setResult] = useState<QuizResult | null>(null);
   const [companyName, setCompanyName] = useState("");
+  const [meshAnim, setMeshAnim] = useState<"idle" | "suck-in" | "expand-out">("expand-out");
+  const [restarting, setRestarting] = useState(false);
+  const [showStickyCtaVisible, setShowStickyCtaVisible] = useState(false);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const stored = sessionStorage.getItem("quizResult");
@@ -77,14 +81,35 @@ export default function ResultPage() {
   }, [router]);
 
   const handleRestart = () => {
+    if (restarting) return;
+    setRestarting(true);
     sessionStorage.removeItem("quizResult");
-    router.replace("/");
+    setMeshAnim("suck-in");
   };
+
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyCtaVisible(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [result]);
+
+  const handleMeshAnimDone = useCallback((phase: "suck-in" | "expand-out") => {
+    if (phase === "suck-in") {
+      router.replace("/");
+    } else if (phase === "expand-out") {
+      setMeshAnim("idle");
+    }
+  }, [router]);
 
   if (!result) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="font-mono text-[#4f8ef7] text-sm">Loading results...</div>
+        <div className="font-mono text-[#00ff41] text-sm">Loading results...</div>
       </div>
     );
   }
@@ -96,12 +121,12 @@ export default function ResultPage() {
       className="relative w-full min-h-[100dvh] bg-black text-white font-[Pretendard,sans-serif] overflow-x-hidden"
       style={{ cursor: "crosshair" }}
     >
-      <ParticleMesh />
+      <ParticleMesh animationState={meshAnim} onAnimationComplete={handleMeshAnimDone} />
 
       {/* Viewport frame */}
       <div className="fixed inset-5 border border-white/15 z-[22] pointer-events-none">
-        <div className="absolute -top-px -left-px w-5 h-5 border-l border-t border-[#4f8ef7]" />
-        <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#4f8ef7]" />
+        <div className="absolute -top-px -left-px w-5 h-5 border-l border-t border-[#00ff41]" />
+        <div className="absolute -bottom-px -right-px w-5 h-5 border-r border-b border-[#00ff41]" />
       </div>
       {/* Top/bottom fade masks */}
       <div className="fixed top-0 left-0 right-0 h-[60px] z-[21] pointer-events-none" style={{ background: "linear-gradient(to bottom, black 40%, transparent)" }} />
@@ -135,14 +160,14 @@ export default function ResultPage() {
         <section className="flex flex-col justify-center">
           {/* Type recommendation card */}
           <div
-            className="border border-[#4f8ef7] bg-[#4f8ef7]/10 px-6 py-4 md:px-12 md:py-6 mb-6 md:mb-8 backdrop-blur-sm self-start"
-            style={{ boxShadow: "0 0 30px rgba(79,142,247,0.15), inset 0 0 30px rgba(79,142,247,0.05)" }}
+            className="border border-[#00ff41] bg-[#00ff41]/10 px-6 py-4 md:px-12 md:py-6 mb-6 md:mb-8 backdrop-blur-sm self-start"
+            style={{ boxShadow: "0 0 30px rgba(0,255,65,0.15), inset 0 0 30px rgba(0,255,65,0.05)" }}
           >
             <div className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[3px] mb-2 md:mb-3">YOUR RECOMMENDED</div>
             <div className="flex items-baseline gap-1.5 md:gap-2 whitespace-nowrap">
               <span
-                className="text-3xl md:text-6xl font-black text-[#4f8ef7]"
-                style={{ textShadow: "0 0 30px rgba(79,142,247,0.5), 0 0 60px rgba(79,142,247,0.2)" }}
+                className="text-3xl md:text-6xl font-black text-[#00ff41]"
+                style={{ textShadow: "0 0 30px rgba(0,255,65,0.5), 0 0 60px rgba(0,255,65,0.2)" }}
               >
                 유형{result.recommendedType}
               </span>
@@ -153,22 +178,22 @@ export default function ResultPage() {
           </div>
 
           {/* Title */}
-          <h1 className="text-xl md:text-[3.2rem] font-extrabold leading-[1.2] tracking-[-0.02em] mb-6 md:mb-8 whitespace-pre-line break-keep">
+          <h1 className="text-xl md:text-[3.2rem] font-extrabold leading-[1.2] tracking-[-0.02em] mb-6 md:mb-8 whitespace-pre-line break-keep text-glow">
             {content.title}
           </h1>
 
           {/* Description */}
-          <p className="text-sm md:text-lg text-white/80 leading-[1.7] mb-8 md:mb-10 max-w-[500px] break-keep">
+          <p className="text-sm md:text-lg text-white/80 leading-[1.7] mb-8 md:mb-10 max-w-[500px] break-keep text-glow">
             {content.desc}
           </p>
 
           {/* CTA */}
-          <div className="flex items-stretch gap-4">
+          <div ref={ctaRef} className="flex items-stretch gap-4">
             <a
               href="https://touraz.visitkorea.or.kr"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#4f8ef7] text-black px-10 md:px-12 py-5 text-base md:text-lg font-bold uppercase tracking-[1px] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(79,142,247,0.4)]"
+              className="bg-[#00ff41] text-black px-10 md:px-12 py-5 text-base md:text-lg font-bold uppercase tracking-[1px] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,255,65,0.4)]"
               style={{ cursor: "pointer" }}
             >
               지원 공고 바로가기
@@ -193,13 +218,13 @@ export default function ResultPage() {
               style={{ animationDelay: `${i * 0.1}s`, animationFillMode: "backwards" }}
             >
               {/* Check icon */}
-              <div className="w-6 h-6 min-w-[24px] border border-[#4f8ef7] flex items-center justify-center text-[#4f8ef7] font-mono text-sm mt-1">
+              <div className="w-6 h-6 min-w-[24px] border border-[#00ff41] flex items-center justify-center text-[#00ff41] font-mono text-sm mt-1">
                 ✓
               </div>
               {/* Info */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-[11px] text-[#4f8ef7]/70 tracking-[1px]">
+                  <span className="font-mono text-[11px] text-[#00ff41]/70 tracking-[1px]">
                     {item.tag}
                   </span>
                   <span className="text-base md:text-lg font-bold text-white">
@@ -234,7 +259,7 @@ export default function ResultPage() {
                 <div key={i} className="flex gap-4 relative">
                   {/* Vertical line */}
                   <div className="flex flex-col items-center">
-                    <div className="w-2.5 h-2.5 border border-[#4f8ef7] bg-[#4f8ef7]/20 rounded-full shrink-0 mt-1" />
+                    <div className="w-2.5 h-2.5 border border-[#00ff41] bg-[#00ff41]/20 rounded-full shrink-0 mt-1" />
                     {i < content.timeline.length - 1 && (
                       <div className="w-px flex-1 bg-white/10 my-1" />
                     )}
@@ -242,7 +267,7 @@ export default function ResultPage() {
                   {/* Content */}
                   <div className="pb-5">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-mono text-[11px] text-[#4f8ef7] tracking-[1px]">
+                      <span className="font-mono text-[11px] text-[#00ff41] tracking-[1px]">
                         {step.month}
                       </span>
                       <span className="text-sm font-bold text-white">{step.title}</span>
@@ -281,6 +306,20 @@ export default function ResultPage() {
         </section>
       </main>
 
+      {/* Sticky bottom CTA — mobile only, visible when main CTA scrolls out */}
+      {showStickyCtaVisible && (
+        <div className="fixed bottom-0 left-0 right-0 z-[30] p-4 lg:hidden animate-fade-in">
+          <a
+            href="https://touraz.visitkorea.or.kr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full bg-[#00ff41] text-black text-center py-4 text-base font-bold uppercase tracking-[1px] transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,65,0.4)]"
+            style={{ cursor: "pointer" }}
+          >
+            지원 공고 바로가기
+          </a>
+        </div>
+      )}
 
     </div>
   );

@@ -3,8 +3,69 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-export default function ParticleMesh() {
+interface ParticleMeshProps {
+  animationState?: "idle" | "suck-in" | "expand-out";
+  onAnimationComplete?: (phase: "suck-in" | "expand-out") => void;
+}
+
+const SUCK_DURATION = 1000;
+const EXPAND_DURATION = 1000;
+const DRIFT_SPEED = 0.00056;
+const PARTICLE_COUNT = 1182;
+
+function easeInCubic(t: number) {
+  return t * t * t;
+}
+
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+// --- Shaders: circle points via gl_PointCoord ---
+const vertexShader = /* glsl */ `
+  uniform float uSize;
+  uniform float uPixelRatio;
+  void main() {
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_PointSize = uSize * uPixelRatio * (300.0 / -mvPosition.z);
+    gl_Position = projectionMatrix * mvPosition;
+  }
+`;
+
+const fragmentShader = /* glsl */ `
+  uniform vec3 uColor;
+  uniform float uOpacity;
+  void main() {
+    float dist = length(gl_PointCoord - vec2(0.5));
+    if (dist > 0.5) discard;
+    float alpha = 1.0 - smoothstep(0.4, 0.5, dist);
+    gl_FragColor = vec4(uColor, uOpacity * alpha);
+  }
+`;
+
+export default function ParticleMesh({
+  animationState = "idle",
+  onAnimationComplete,
+}: ParticleMeshProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const animPhaseRef = useRef<"idle" | "suck-in" | "expand-out">(
+    animationState === "idle" ? "idle" : animationState
+  );
+  const animStartTimeRef = useRef<number>(
+    animationState === "expand-out" ? performance.now() : 0
+  );
+  const animCompleteCbRef = useRef(onAnimationComplete);
+  const animDoneRef = useRef(false);
+
+  animCompleteCbRef.current = onAnimationComplete;
+
+  useEffect(() => {
+    if (animationState !== animPhaseRef.current) {
+      animPhaseRef.current = animationState;
+      animStartTimeRef.current = performance.now();
+      animDoneRef.current = false;
+    }
+  }, [animationState]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -19,55 +80,105 @@ export default function ParticleMesh() {
       0.1,
       1000
     );
-    camera.position.z = isWide ? 7 : 4.5;
+
+    const CAMERA_REST = isWide ? 5 : 3;
+    const CAMERA_SUCK_TARGET = isWide ? 0.5 : 0.3; // fly into center
+    const CAMERA_EXPAND_START = isWide ? 10 : 6; // arrive from far behind
+
+    // Set initial camera position based on animation state
+    if (animPhaseRef.current === "expand-out") {
+      camera.position.z = CAMERA_EXPAND_START;
+    } else {
+      camera.position.z = CAMERA_REST;
+    }
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    const radius = isWide ? 4.5 : 2.5;
+    const radius = isWide ? 6.0 : 3.5;
+    const actualCount = isWide ? PARTICLE_COUNT : Math.round(PARTICLE_COUNT * 0.595);
 
-    const geometry = new THREE.IcosahedronGeometry(radius, 4);
-    const pointsMat = new THREE.PointsMaterial({
-      color: 0x4f8ef7,
-      size: isWide ? 0.025 : 0.02,
+    // Random particles distributed uniformly in sphere volume
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(actualCount * 3);
+    for (let i = 0; i < actualCount; i++) {
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const r = radius * Math.cbrt(Math.random()); // cube root for uniform volume
+      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      positions[i * 3 + 2] = r * Math.cos(phi);
+    }
+    geometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3)
+    );
+
+    const pointsMat = new THREE.ShaderMaterial({
+      uniforms: {
+        uColor: { value: new THREE.Color(0x00ff41) },
+        uOpacity: { value: 0.6 },
+        uSize: { value: isWide ? 0.06 : 0.028 },
+        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+      },
+      vertexShader,
+      fragmentShader,
       transparent: true,
-      opacity: 0.6,
+      depthWrite: false,
     });
     const points = new THREE.Points(geometry, pointsMat);
     scene.add(points);
 
-    const wireGeo = new THREE.WireframeGeometry(geometry);
-    const lineMat = new THREE.LineBasicMaterial({
-      color: 0x3f78e0,
-      transparent: true,
-      opacity: 0.1,
-    });
-    const wireframe = new THREE.LineSegments(wireGeo, lineMat);
-    scene.add(wireframe);
-
-    const target = { x: 0, y: 0 };
-    let autoAngle = 0;
-    let isDragging = false;
-    let lastTouch = { x: 0, y: 0 };
-    let hasInteraction = false;
+    let driftAngle = 0;
 
     let animId = 0;
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      if (hasInteraction) {
-        points.rotation.x += (target.x - points.rotation.x) * 0.04;
-        points.rotation.y += (target.y - points.rotation.y) * 0.04;
-      } else {
-        autoAngle += 0.0025;
-        points.rotation.x = Math.sin(autoAngle * 0.7) * 0.25;
-        points.rotation.y = autoAngle;
+      const phase = animPhaseRef.current;
+      const now = performance.now();
+
+      // --- Camera Z animation (stars stay in place, camera flies through) ---
+      if (phase === "suck-in" && !animDoneRef.current) {
+        const elapsed = now - animStartTimeRef.current;
+        const t = Math.min(elapsed / SUCK_DURATION, 1);
+        const eased = easeInCubic(t);
+
+        // Fly forward: REST → SUCK_TARGET
+        camera.position.z =
+          CAMERA_REST + (CAMERA_SUCK_TARGET - CAMERA_REST) * eased;
+
+        if (t >= 1) {
+          // Jump camera behind for seamless expand-out
+          camera.position.z = CAMERA_EXPAND_START;
+          animPhaseRef.current = "expand-out";
+          animStartTimeRef.current = now;
+          animDoneRef.current = false;
+          animCompleteCbRef.current?.("suck-in");
+        }
+      } else if (phase === "expand-out" && !animDoneRef.current) {
+        const elapsed = now - animStartTimeRef.current;
+        const t = Math.min(elapsed / EXPAND_DURATION, 1);
+        const eased = easeOutCubic(t);
+
+        // Fly forward: EXPAND_START → REST
+        camera.position.z =
+          CAMERA_EXPAND_START + (CAMERA_REST - CAMERA_EXPAND_START) * eased;
+
+        if (t >= 1) {
+          camera.position.z = CAMERA_REST;
+          animDoneRef.current = true;
+          animCompleteCbRef.current?.("expand-out");
+        }
       }
 
-      wireframe.rotation.x = points.rotation.x;
-      wireframe.rotation.y = points.rotation.y;
+      // --- Constant slow drift (always, all phases) ---
+      driftAngle += DRIFT_SPEED;
+      points.rotation.x = Math.sin(driftAngle * 0.6) * 0.15;
+      points.rotation.y = driftAngle;
+
       renderer.render(scene, camera);
     };
     animate();
@@ -76,58 +187,17 @@ export default function ParticleMesh() {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-
-    // Desktop: mouse position controls rotation
-    const handleMouseMove = (e: MouseEvent) => {
-      hasInteraction = true;
-      target.x = (e.clientY / window.innerHeight - 0.5) * 1.2;
-      target.y = (e.clientX / window.innerWidth - 0.5) * 1.2;
-    };
-
-    // Mobile: drag delta controls rotation
-    const handleTouchStart = (e: TouchEvent) => {
-      isDragging = true;
-      const t = e.touches[0];
-      lastTouch.x = t.clientX;
-      lastTouch.y = t.clientY;
-      // Sync target to current rotation so drag starts smoothly
-      if (!hasInteraction) {
-        target.x = points.rotation.x;
-        target.y = points.rotation.y;
-        hasInteraction = true;
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging) return;
-      const t = e.touches[0];
-      const dx = t.clientX - lastTouch.x;
-      const dy = t.clientY - lastTouch.y;
-      target.y -= dx * 0.0054;
-      target.x -= dy * 0.0054;
-      lastTouch.x = t.clientX;
-      lastTouch.y = t.clientY;
-    };
-
-    const handleTouchEnd = () => {
-      isDragging = false;
+      pointsMat.uniforms.uPixelRatio.value = Math.min(
+        window.devicePixelRatio,
+        2
+      );
     };
 
     window.addEventListener("resize", handleResize);
-    document.addEventListener("mousemove", handleMouseMove);
-    // Touch events on document so they work even when touching UI elements on top
-    document.addEventListener("touchstart", handleTouchStart, { passive: true });
-    document.addEventListener("touchmove", handleTouchMove, { passive: true });
-    document.addEventListener("touchend", handleTouchEnd);
 
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
       renderer.dispose();
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);

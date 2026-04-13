@@ -12,7 +12,7 @@ export default function HeroIllustration() {
       <defs>
         <linearGradient id="barGrad" x1="0" y1="1" x2="0" y2="0">
           <stop offset="0%" stopColor="#a5c4f7" />
-          <stop offset="100%" stopColor="#3f78e0" />
+          <stop offset="100%" stopColor="#00cc33" />
         </linearGradient>
         <linearGradient id="greenGrad" x1="0" y1="1" x2="0" y2="0">
           <stop offset="0%" stopColor="#b2f0d8" />
@@ -66,7 +66,7 @@ export default function HeroIllustration() {
       })}
 
       {/* Donut chart */}
-      <circle cx="258" cy="100" r="30" fill="none" stroke="#e0ecff" strokeWidth="10" />
+      <circle cx="258" cy="100" r="30" fill="none" stroke="#d0ffd6" strokeWidth="10" />
       <circle
         cx="258"
         cy="100"
@@ -126,7 +126,7 @@ export default function HeroIllustration() {
         { cx: 195, cy: 88, delay: 1.7 },
         { cx: 230, cy: 120, delay: 1.9 },
       ].map((dot, i) => (
-        <circle key={i} cx={dot.cx} cy={dot.cy} r="3" fill="#3f78e0" opacity="0">
+        <circle key={i} cx={dot.cx} cy={dot.cy} r="3" fill="#00cc33" opacity="0">
           <animate
             attributeName="opacity"
             values="0;1;1;0"
@@ -143,7 +143,7 @@ export default function HeroIllustration() {
       <rect x="145" y="178" width="70" height="6" rx="3" fill="#d0d8e4" />
 
       {/* "AI" label */}
-      <rect x="240" y="55" width="36" height="18" rx="4" fill="#3f78e0" opacity="0">
+      <rect x="240" y="55" width="36" height="18" rx="4" fill="#00cc33" opacity="0">
         <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="1.4s" fill="freeze" />
       </rect>
       <text x="258" y="68" textAnchor="middle" fontSize="10" fontWeight="700" fill="#fff" opacity="0">

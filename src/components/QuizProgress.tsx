@@ -21,7 +21,7 @@ export default function QuizProgress({
       </div>
       <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-[#3f78e0] to-[#45c4a0] transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-[#00cc33] to-[#45c4a0] transition-all duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>

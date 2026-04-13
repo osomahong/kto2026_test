@@ -7,8 +7,8 @@ const type1Content = {
   subtitle: "유형1: Starter — 데이터·AI 환경 구축 및 활용",
   summary:
     "AI가 똑똑해지려면 양질의 데이터가 필요합니다.\n지금 잘 기록해두는 데이터 하나하나가\n6개월 후 AI 성과의 밑거름이 됩니다.",
-  color: "#3f78e0",
-  bgColor: "#e0ecff",
+  color: "#00cc33",
+  bgColor: "#d0ffd6",
   items: [
     "GA4, GTM, BigQuery, Looker Studio 등 분석 환경을 구축해 드립니다",
     "우리 기업에 맞는 고객 행동 데이터 수집 체계를 함께 설계합니다",
