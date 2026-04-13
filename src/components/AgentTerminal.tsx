@@ -35,14 +35,14 @@ export default function AgentTerminal({
 
   const lines: TerminalLine[] = [
     { text: "> 응답 데이터 수집 완료 (10/10)", type: "command" },
-    { text: "> 데이터 수집 환경 분석 중... ████████░░", type: "progress" },
-    { text: "> 분석 도구 활용도 평가 중... ████████░░", type: "progress" },
-    { text: "> 마케팅 캠페인 역량 분석 중... ████████░░", type: "progress" },
-    { text: "> AI 활용 준비도 진단 중... ████████░░", type: "progress" },
+    { text: "> 데이터 수집 환경 분석 중... ███░", type: "progress" },
+    { text: "> 분석 도구 활용도 평가 중... ███░", type: "progress" },
+    { text: "> 캠페인 역량 분석 중... ███░", type: "progress" },
+    { text: "> AI 활용 준비도 진단 중... ███░", type: "progress" },
     { text: "> ", type: "command" },
     { text: "> 종합 점수 산출 중...", type: "command" },
     {
-      text: `> 최적 유형 매칭: [유형${resultType} ${resultType === 1 ? "Starter" : "Growth"}] ✓`,
+      text: `> 유형 매칭: [유형${resultType} ${resultType === 1 ? "Starter" : "Growth"}] ✓`,
       type: "result",
       highlight: true,
     },

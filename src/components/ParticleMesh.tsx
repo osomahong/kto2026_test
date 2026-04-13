@@ -11,7 +11,7 @@ interface ParticleMeshProps {
 const SUCK_DURATION = 1000;
 const EXPAND_DURATION = 1000;
 const DRIFT_SPEED = 0.00056;
-const PARTICLE_COUNT = 1182;
+const PARTICLE_COUNT = 1005;
 
 function easeInCubic(t: number) {
   return t * t * t;
@@ -98,7 +98,7 @@ export default function ParticleMesh({
     container.appendChild(renderer.domElement);
 
     const radius = isWide ? 6.0 : 3.5;
-    const actualCount = isWide ? PARTICLE_COUNT : Math.round(PARTICLE_COUNT * 0.595);
+    const actualCount = isWide ? PARTICLE_COUNT : Math.round(PARTICLE_COUNT * 0.476);
 
     // Random particles distributed uniformly in sphere volume
     const geometry = new THREE.BufferGeometry();

@@ -18,7 +18,12 @@
 
 @layer base {
   html {
-    font-size: 120%;
+    font-size: 100%;
+  }
+  @media (min-width: 768px) {
+    html {
+      font-size: 120%;
+    }
   }
   body {
     font-family: var(--font-sans);

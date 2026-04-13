@@ -151,10 +151,10 @@ export default function QuizPage() {
         </div>
 
         {/* Progress bar */}
-        <div className="w-[240px] h-[2px] bg-white/15 mb-5 shorth:mb-2 relative">
+        <div className="w-[240px] h-[2px] bg-white/15 mb-8 shorth:mb-4 md:mb-10 relative">
           <div
             className="absolute top-0 left-0 h-full bg-[#00ff41] transition-all duration-500 ease-out"
-            style={{ width: `${progressPct}%`, boxShadow: "0 0 8px #00ff41, 0 0 20px #00ff41, 0 0 40px rgba(0,255,65,0.3)" }}
+            style={{ width: `${progressPct}%`, boxShadow: "0 0 6px #00ff41, 0 0 14px rgba(0,255,65,0.4)" }}
           />
         </div>
 
