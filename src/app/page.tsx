@@ -89,7 +89,7 @@ export default function IntroPage() {
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl shorth:text-xl md:text-[4.5rem] font-extrabold leading-[1.1] tracking-[-0.04em] mb-6 shorth:mb-4">
+          <h1 className="text-[2.5rem] shorth:text-[2rem] md:text-[4.5rem] font-extrabold leading-[1.1] tracking-[-0.04em] mb-6 shorth:mb-4">
             <span className="text-glow">우리 기업에 맞는</span>
             <br />
             <span className="inline-block bg-[rgba(0,255,65,0.45)] px-1.5 py-0.5 -mx-1.5 whitespace-nowrap">DATA·AI 지원사업</span>
