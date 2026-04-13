@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "유형 진단 테스트 | 2026 관광기업 데이터·AI 활용 지원",
+  title: "2026 관광기업 DATA AI 지원사업 유형 분석 테스트",
   description:
-    "10개 질문으로 데이터·AI 역량을 진단하고 최적의 지원 유형을 매칭합니다",
+    "관광기업의 데이터·AI 역량을 진단하고 맞춤 지원사업 유형을 확인하세요. 데이터 수집 환경, 분석 도구, 마케팅 캠페인, AI 활용 수준을 종합 분석합니다.",
   openGraph: {
-    title: "우리 기업에 맞는 DATA·AI 지원사업 유형 확인하기",
+    title: "2026 관광기업 DATA AI 지원사업 유형 분석 테스트",
     description:
-      "10개 질문으로 데이터·AI 역량을 진단하고 최적의 지원 유형을 매칭합니다",
+      "관광기업의 데이터·AI 역량을 진단하고 맞춤 지원사업 유형을 확인하세요. 데이터 수집 환경, 분석 도구, 마케팅 캠페인, AI 활용 수준을 종합 분석합니다.",
     type: "website",
     images: [
       {
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "우리 기업에 맞는 DATA·AI 지원사업 유형 확인하기",
+    title: "2026 관광기업 DATA AI 지원사업 유형 분석 테스트",
     description:
-      "10개 질문으로 데이터·AI 역량을 진단하고 최적의 지원 유형을 매칭합니다",
+      "관광기업의 데이터·AI 역량을 진단하고 맞춤 지원사업 유형을 확인하세요. 데이터 수집 환경, 분석 도구, 마케팅 캠페인, AI 활용 수준을 종합 분석합니다.",
     images: ["/og-image.png"],
   },
 };
