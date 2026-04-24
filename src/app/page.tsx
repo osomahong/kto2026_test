@@ -60,11 +60,11 @@ export default function IntroPage() {
 
       {/* Header row — mobile only */}
       <div className="relative z-[30] px-7 pt-7 pb-2 md:hidden">
-        <img src="/kto-logo.png" alt="한국관광공사" className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+        <img src="/kto-logo-white.svg" alt="한국관광공사" className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity" />
       </div>
       {/* Logo — desktop fixed */}
       <div className="hidden md:block fixed top-9 left-9 z-[11]">
-        <img src="/kto-logo.png" alt="한국관광공사" className="h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+        <img src="/kto-logo-white.svg" alt="한국관광공사" className="h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
       </div>
       <div className="fixed bottom-9 right-9 z-[11] hidden md:flex items-center gap-2">
         <span className="font-mono text-[10px] uppercase tracking-[2px] text-white/30">POWERED BY</span>
@@ -85,23 +85,23 @@ export default function IntroPage() {
           {/* Kicker */}
           <div className="font-mono text-[#00ff41] text-xs mb-4 flex items-center gap-2.5 text-glow">
             <span className="w-[30px] h-px bg-[#00ff41] inline-block" />
-            DATA AI Programs
+            데이터·AI 활용 지원 사업
           </div>
 
           {/* Title */}
           <h1 className="text-[2.5rem] shorth:text-[2rem] md:text-[4.5rem] font-extrabold leading-[1.1] tracking-[-0.04em] mb-6 shorth:mb-4">
             <span className="text-glow">우리 기업에 맞는</span>
             <br />
-            <span className="inline-block bg-[rgba(0,255,65,0.45)] px-1.5 py-0.5 -mx-1.5 whitespace-nowrap">DATA·AI 지원사업</span>
+            <span className="inline-block bg-[rgba(0,255,65,0.45)] px-1.5 py-0.5 -mx-1.5 whitespace-nowrap">데이터·AI 활용 지원 사업</span>
             <br />
             <span className="text-glow">유형 확인하기</span>
           </h1>
 
           {/* Description */}
           <p className="text-sm md:text-xl text-white/70 leading-relaxed mb-10 shorth:mb-6 max-w-[460px] break-keep text-glow">
-            우리 회사의 데이터·AI 역량을 진단하고
+            우리 회사에 맞을 것 같은
             <br />
-            필요한 지원 유형을 확인합니다.
+            지원 유형을 살펴보세요.
           </p>
 
           {/* Action */}
@@ -112,7 +112,7 @@ export default function IntroPage() {
               className="group bg-[#00ff41] text-black px-8 md:px-10 py-4 shorth:py-3 md:py-[18px] font-mono uppercase text-sm font-bold tracking-[1px] relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,65,0.5)] hover:-translate-y-0.5 disabled:opacity-30 disabled:hover:shadow-none disabled:hover:translate-y-0 pointer-events-auto"
               style={{ cursor: "pointer" }}
             >
-              <span className="relative">진단 프로세스 시작하기</span>
+              <span className="relative">진단 시작하기</span>
             </button>
           </div>
         </section>
@@ -136,28 +136,15 @@ export default function IntroPage() {
             ))}
           </div>
         </div>
-        <div className="border-l-2 border-white/15 pl-6">
-          <div className="font-mono text-xs text-white/40 mb-3 tracking-[2px]">
-            AI_SUBSCRIPTION
-          </div>
-          <div className="font-mono text-3xl text-white">
-            100<span className="text-lg text-white/50 ml-1">만원</span>
-          </div>
-          <div className="grid grid-cols-[repeat(10,8px)] gap-1.5 mt-3">
-            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((active, i) => (
-              <div
-                key={i}
-                className={`w-2 h-2 ${active ? "bg-[#00ff41]" : "bg-white/10"}`}
-              />
-            ))}
-          </div>
-        </div>
         <div className="border-l-2 border-[#00ff41] pl-6 deadline-glow">
           <div className="font-mono text-xs text-[#00ff41] mb-3 tracking-[2px]">
             DEADLINE
           </div>
           <div className="font-mono text-3xl text-white deadline-glow-text">
-            5/21<span className="text-lg text-white/70 ml-1">(목)</span>
+            5/20<span className="text-lg text-white/70 ml-1">(수)</span>
+          </div>
+          <div className="font-mono text-sm text-white/70 mt-1 tracking-[1px]">
+            18:00 마감
           </div>
         </div>
       </div>

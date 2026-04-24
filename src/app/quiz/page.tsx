@@ -122,7 +122,7 @@ export default function QuizPage() {
       {/* Header row — mobile only (flow-based, prevents overlap) */}
       <div className="relative z-[30] flex justify-between items-center px-7 pt-7 pb-2 md:hidden">
         <button onClick={handleRestart} style={{ cursor: "pointer" }}>
-          <img src="/kto-logo.png" alt="한국관광공사" className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+          <img src="/kto-logo-white.svg" alt="한국관광공사" className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity" />
         </button>
         {history.length > 1 && (
           <button
@@ -136,7 +136,7 @@ export default function QuizPage() {
       </div>
       {/* Logo — desktop fixed */}
       <button onClick={handleRestart} className="hidden md:block fixed top-9 left-9 z-[30]" style={{ cursor: "pointer" }}>
-        <img src="/kto-logo.png" alt="한국관광공사" className="h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+        <img src="/kto-logo-white.svg" alt="한국관광공사" className="h-14 w-auto opacity-90 hover:opacity-100 transition-opacity" />
       </button>
       <div className="fixed bottom-9 right-9 z-[11] hidden md:flex items-center gap-2">
         <span className="font-mono text-[10px] uppercase tracking-[2px] text-white/30">POWERED BY</span>

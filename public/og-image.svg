@@ -64,19 +64,19 @@
   <line x1="90" y1="198" x2="126" y2="198" stroke="#00ff41" stroke-width="2"/>
 
   <!-- Kicker text -->
-  <text x="138" y="203" font-family="monospace" font-size="18" fill="#00ff41" letter-spacing="3">DATA AI Programs</text>
+  <text x="138" y="203" font-family="monospace" font-size="15" fill="#00ff41" letter-spacing="2">2026 관광기업 데이터·AI 활용 지원 사업</text>
 
   <!-- Title line 1 -->
   <text x="90" y="275" font-family="'Pretendard Variable', 'Apple SD Gothic Neo', sans-serif" font-size="56" font-weight="800" fill="white" letter-spacing="-1">우리 기업에 맞는</text>
 
   <!-- Title line 2 with highlight -->
-  <rect x="82" y="292" width="555" height="68" fill="#00ff41" opacity="0.45" rx="2"/>
-  <text x="90" y="347" font-family="'Pretendard Variable', 'Apple SD Gothic Neo', sans-serif" font-size="56" font-weight="800" fill="white" letter-spacing="-1">DATA·AI 지원사업</text>
+  <rect x="82" y="292" width="720" height="68" fill="#00ff41" opacity="0.45" rx="2"/>
+  <text x="90" y="347" font-family="'Pretendard Variable', 'Apple SD Gothic Neo', sans-serif" font-size="56" font-weight="800" fill="white" letter-spacing="-1">데이터·AI 활용 지원 사업</text>
 
   <!-- Title line 3 -->
   <text x="90" y="420" font-family="'Pretendard Variable', 'Apple SD Gothic Neo', sans-serif" font-size="56" font-weight="800" fill="white" letter-spacing="-1">유형 확인하기</text>
 
   <!-- Description -->
-  <text x="90" y="480" font-family="'Pretendard Variable', 'Apple SD Gothic Neo', sans-serif" font-size="22" fill="white" opacity="0.55" letter-spacing="0.5">우리 회사의 데이터·AI 역량을 진단하고</text>
-  <text x="90" y="512" font-family="'Pretendard Variable', 'Apple SD Gothic Neo', sans-serif" font-size="22" fill="white" opacity="0.55" letter-spacing="0.5">필요한 지원 유형을 확인합니다.</text>
+  <text x="90" y="480" font-family="'Pretendard Variable', 'Apple SD Gothic Neo', sans-serif" font-size="22" fill="white" opacity="0.55" letter-spacing="0.5">우리 회사에 맞을 것 같은</text>
+  <text x="90" y="512" font-family="'Pretendard Variable', 'Apple SD Gothic Neo', sans-serif" font-size="22" fill="white" opacity="0.55" letter-spacing="0.5">지원 유형을 살펴보세요.</text>
 </svg>

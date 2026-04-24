@@ -15,6 +15,12 @@ npm-debug.log*
 # env files
 .env*.local
 
+# service account keys
+*-key.json
+work-agent-project-*.json
+gcp-*.json
+service-account*.json
+
 # vercel
 .vercel
 

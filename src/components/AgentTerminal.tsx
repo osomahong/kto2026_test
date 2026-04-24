@@ -89,7 +89,7 @@ export default function AgentTerminal({
 
       {/* Logo */}
       <div className="fixed top-7 left-7 md:top-9 md:left-9 z-[60]">
-        <img src="/kto-logo.png" alt="한국관광공사" className="h-12 md:h-14 w-auto opacity-90" />
+        <img src="/kto-logo-white.svg" alt="한국관광공사" className="h-12 md:h-14 w-auto opacity-90" />
       </div>
 
       {/* System label */}
