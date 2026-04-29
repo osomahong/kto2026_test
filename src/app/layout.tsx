@@ -8,6 +8,16 @@ export const metadata: Metadata = {
   title: "2026 관광기업 데이터·AI 활용 지원 사업 유형 확인 테스트",
   description:
     "2026 관광기업 데이터·AI 활용 지원 사업의 유형을 살펴보는 간단한 테스트입니다. 우리 회사에 어울릴 만한 유형을 참고해 보세요.",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
   openGraph: {
     title: "2026 관광기업 데이터·AI 활용 지원 사업 유형 확인 테스트",
     description:
